@@ -6,3 +6,11 @@
 *.sql
 *.ova
 bakupdatasiswa.*
+
+# User-generated content — not in repo, keep on server
+uploads/
+Uploads/
+storage/
+apk-anggota/
+apk-dewan/
+sweetalert2/

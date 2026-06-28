@@ -21,6 +21,35 @@ jobs:
         run: |
           find . -name "*.php" -not -path "./vendor/*" -not -path "./spss/vendor/*" -exec php -l {} \;
 
+      - name: Clean up stale files from server (one-time)
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lftp -e "
+            set ftp:ssl-force true;
+            set ssl:verify-certificate no;
+            set ftp:ssl-protect-data true;
+            open -u $FTP_USER,$FTP_PASS -p 21 $FTP_HOST;
+            cd /htdocs;
+            rm -f 4dm1n.php admin_berita.php admin_jadwal.php admin_bagan.php;
+            rm -f ganti.php add_user.php view_pendaftaran.php view_file.php;
+            rm -f upload_file.php vw_absen.php view_lgn.php index2.php;
+            rm -f berita.php detail_berita.php bagan.php bagann.php;
+            rm -f d4ft4r.php exportexcel.php exportexcelpendaftaran.php;
+            rm -f form_data.php api_siswa.php koneksi.php config.php;
+            rm -f generate_sitemap.php ip.php office-rdr.php t.php addgt.php vw_lgn.php;
+            cd admin;
+            rm -f index.php index2.php hapus_berita.php tes.html;
+            cd ../spss;
+            rm -f index.php index2.php verify-login.php register.php;
+            rm -f register-post.php verify-register.php auth-check.php;
+            rm -f pr.php list_siswa.php jadwal.php bagann.php config.php;
+            rm -f index-ori.php logout-ori.php login.php.bak;
+            quit;
+          "
+
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -40,3 +69,9 @@ jobs:
             **/*.md
             **/*.sql
             **/*.ova
+            uploads/
+            Uploads/
+            storage/
+            apk-anggota/
+            apk-dewan/
+            sweetalert2/
