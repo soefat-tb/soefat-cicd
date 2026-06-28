@@ -1,0 +1,36 @@
+# Database dumps
+*.sql
+*.ova
+bakupdatasiswa.*
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs / temp
+*.log
+tmp/
+temp/
+
+# User uploads (not in version control)
+uploads/
+Uploads/
+
+# APK files (external Android app stuff)
+apk-anggota/
+apk-dewan/
+
+# SweetAlert2 (CDN version preferred)
+sweetalert2/
+
+# Config with DB credentials
+# Remove these lines if you need configs versioned
+# config/*.php
+# spss/config/*.php

@@ -1,0 +1,32 @@
+Options +FollowSymLinks -Indexes
+RewriteEngine On
+
+# Redirect HTTP to HTTPS (Pastikan SSL sudah aktif)
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Blokir akses ke file sensitif
+<FilesMatch "^(error_log|php.ini|php5.ini|install.php|.env)$">
+    Require all denied
+</FilesMatch>
+
+# Blokir Query String yang mencurigakan
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+RewriteRule ^ - [F,L]
+
+# Batasi akses direktori (Proteksi tambahan)
+<IfModule mod_autoindex.c>
+    IndexIgnore *
+</IfModule>
+
+# Nonaktifkan ModSecurity jika terlalu ketat
+<IfModule mod_security.c>
+    SecRuleEngine On
+</IfModule>
+
+# Proteksi dasar terhadap serangan XSS dan injeksi
+Header set X-XSS-Protection "1; mode=block"
+Header always append X-Frame-Options DENY
+Header set X-Content-Type-Options nosniff

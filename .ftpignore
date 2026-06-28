@@ -1,0 +1,8 @@
+.git/
+.gitignore
+.github/
+.ftpignore
+*.md
+*.sql
+*.ova
+bakupdatasiswa.*

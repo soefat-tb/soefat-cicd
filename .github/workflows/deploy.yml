@@ -1,0 +1,42 @@
+name: Deploy to InfinityFree
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Validate PHP syntax
+        run: |
+          find . -name "*.php" -not -path "./vendor/*" -not -path "./spss/vendor/*" -exec php -l {} \;
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          protocol: ftp
+          local-dir: ./
+          server-dir: /htdocs/
+          exclude: |
+            **/.git*
+            **/.git/**/*
+            **/.github/**/*
+            **/.ftpignore
+            **/.gitignore
+            **/*.md
+            **/*.sql
+            **/*.ova
